@@ -222,12 +222,13 @@ function optimize() {
                 progressElement.text(progress);
                 if (currentBuildCombinationIndex < combinations.length) {
                     console.log("Starting job " + currentBuildCombinationIndex);
-                    worker.postMessage([combinations[currentBuildCombinationIndex].combination, combinations[currentBuildCombinationIndex].data, combinations[currentBuildCombinationIndex].fixed,selectedEspers, itemInventory, statToMaximize, selectedUnit, ennemyRaces, ennemyResist, innateElements,currentBuildCombinationIndex]);
+                    worker.postMessage(["calculateBuild",combinations[currentBuildCombinationIndex].combination, combinations[currentBuildCombinationIndex].data, combinations[currentBuildCombinationIndex].fixed, currentBuildCombinationIndex]);
                     currentBuildCombinationIndex++;
                 }
             }
+            worker.postMessage(["init",selectedEspers, itemInventory, statToMaximize, selectedUnit, ennemyRaces, ennemyResist, innateElements]);
             console.log("Starting job " + currentBuildCombinationIndex);
-            worker.postMessage([combinations[currentBuildCombinationIndex].combination, combinations[currentBuildCombinationIndex].data, combinations[currentBuildCombinationIndex].fixed,selectedEspers, itemInventory, statToMaximize, selectedUnit, ennemyRaces, ennemyResist, innateElements, currentBuildCombinationIndex]);
+            worker.postMessage(["calculateBuild",combinations[currentBuildCombinationIndex].combination, combinations[currentBuildCombinationIndex].data, combinations[currentBuildCombinationIndex].fixed, currentBuildCombinationIndex]);
             currentBuildCombinationIndex++;
         }
     }

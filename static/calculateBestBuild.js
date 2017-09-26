@@ -13,16 +13,19 @@ var innateElements;
 var onlyUseOwnedItems = true;
 
 onmessage = function(e) {
-    selectedEspers = e.data[3];
-    itemInventory = e.data[4];
-    statToMaximize = e.data[5];
-    selectedUnit = e.data[6];
-    ennemyRaces = e.data[7];
-    ennemyResist = e.data[8];
-    innateElements = e.data[9];
-    bestValue = 0;
-    findBestBuildForCombination(0,[null, null, null, null, null, null, null, null, null, null], e.data[0], e.data[1], e.data[2]);
-    postMessage({"bestBuild":bestBuild, "bestEsper":bestEsper, "bestValue":bestValue,"index":e.data[10]});
+    if (e.data[0] == "init") {
+        selectedEspers = e.data[1];
+        itemInventory = e.data[2];
+        statToMaximize = e.data[3];
+        selectedUnit = e.data[4];
+        ennemyRaces = e.data[5];
+        ennemyResist = e.data[6];
+        innateElements = e.data[7];    
+    } else {
+        bestValue = 0;
+        findBestBuildForCombination(0,[null, null, null, null, null, null, null, null, null, null], e.data[1], e.data[2], e.data[3]);
+        postMessage({"bestBuild":bestBuild, "bestEsper":bestEsper, "bestValue":bestValue,"index":e.data[4]});
+    }
 }
 
 function findBestBuildForCombination(index, build, typeCombination, dataWithConditionItems, fixedItems) {
