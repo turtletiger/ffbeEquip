@@ -33,6 +33,8 @@ var equipable;
 
 var ennemyResist = {"fire":0,"ice":0,"water":0,"wind":0,"lightning":0,"earth":0,"light":-50,"dark":0};
 var ennemyRaces;
+var ennemyDef = 100;
+var ennemySpr = 100;
 var innateElements = [];
 
 var bestValue = 0;
@@ -163,17 +165,44 @@ function prepareData(equipable) {
 
 function selectEspers() {
     selectedEspers = [];
-    var maxValueEsper = null;
-    for (var index in espers) {
-        if (maxValueEsper == null || espers[index][statToMaximize] > maxValueEsper[statToMaximize]) {
-            maxValueEsper = espers[index];
+    if (goal == "hybrid") {
+        for (var index in espers) {
+            var foundStrictlyBetter = false;
+            var strictlyWorseIndex = [];
+            var newEsper = espers[index];
+            for (var selectedEspersIndex in selectedEspers) {
+                if (newEsper.atk > selectedEspers[selectedEspersIndex].atk && newEsper.mag > selectedEspers[selectedEspersIndex].mag) {
+                    strictlyWorseIndex.push(selectedEspersIndex);
+                }
+                if (newEsper.atk < selectedEspers[selectedEspersIndex].atk && newEsper.mag < selectedEspers[selectedEspersIndex].mag) {
+                    foundStrictlyBetter = true;
+                }
+            }
+            if (!foundStrictlyBetter) {
+                selectedEspers.push(newEsper);
+            }
+            for (var indexToRemove in strictlyWorseIndex) {
+                selectedEspers.splice(strictlyWorseIndex[strictlyWorseIndex.length - indexToRemove - 1],1);
+            }
         }
-        if (getKillerCoef(espers[index]) > 0) {
-            selectedEspers.push(espers[index]);
+        for (var index in espers) {
+            if (getKillerCoef(espers[index]) > 0 && !selectedEspers.includes(espers[index])) {
+                selectedEspers.push(espers[index]);
+            }
+        }    
+    } else {
+        var maxValueEsper = null;
+        for (var index in espers) {
+            if (maxValueEsper == null || espers[index][statToMaximize] > maxValueEsper[statToMaximize]) {
+                maxValueEsper = espers[index];
+            }
+            if (getKillerCoef(espers[index]) > 0) {
+                selectedEspers.push(espers[index]);
+            }
         }
-    }
-    if (!selectedEspers.includes(maxValueEsper)) {
-        selectedEspers.push(maxValueEsper);
+        if (!selectedEspers.includes(maxValueEsper)) {
+            selectedEspers.push(maxValueEsper);
+        }    
     }
 }
 
