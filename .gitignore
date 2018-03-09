@@ -10,3 +10,4 @@ googleOAuth/
 tools/JP/sources/
 .config.json
 *.log
+/ffbeEquipAngular/ffbeEquip/node_modules
